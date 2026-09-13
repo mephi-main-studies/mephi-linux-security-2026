@@ -1,0 +1,8 @@
+Cmnd_Alias TIME_CMDS = \
+    /usr/bin/timedatectl set-time *, \
+    /usr/bin/timedatectl set-timezone *, \
+    /usr/bin/timedatectl set-ntp *, \
+    /usr/sbin/hwclock --systohc, \
+    /usr/bin/date -s *
+
+user1 ALL=(root) NOPASSWD: TIME_CMDS

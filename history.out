@@ -1,0 +1,39 @@
+   1  sudo groupadd students
+   2  getent group students
+   3  sudo useradd -u 1234 -m -s /bin/bash -G students user1
+   4  id user1
+   5  sudo passwd user1
+   6  sudo chage -M 90 user1
+   7  sudo chage -l user1
+   8  sudo find / -xdev -type f -perm -4000 -printf '%m %u:%g %p\n' 2>/dev/null | sort > ~/suid-files.out
+   9  ps -eo pid,ppid,user,ruid,euid,comm,cmd --sort=pid | awk 'NR==1 || ($5==0 && $4>=1000)' > ~/suid-procs.out
+   10  ps -eo pid,ppid,user,ruid,euid,comm,cmd --sort=pid | awk 'NR==1 || ($5==0 && $4>=1000)' >> ~/suid-procs.out
+   11  cat /etc/shadow 2>&1 | head -n1
+   12  cp /usr/bin/cat ~/cat_suid_demo
+   13  sudo mv ~/cat_suid_demo /usr/local/bin/cat_suid_demo
+   14  sudo chown root:root /usr/local/bin/cat_suid_demo
+   15  sudo chmod 4755 /usr/local/bin/cat_suid_demo
+   16  sudo restorecon -v /usr/local/bin/cat_suid_demo
+   17  stat /usr/local/bin/cat_suid_demo
+   18  /usr/local/bin/cat_suid_demo /etc/shadow | head -n 1
+   19  sudo cp /bin/cat /usr/local/bin/cat_suid_demo
+   20  sudo chown root:root /usr/local/bin/cat_suid_demo
+   21  sudo chmod 4755 /usr/local/bin/cat_suid_demo
+   22  ls -l /usr/local/bin/cat_suid_demo
+   23  ls -lZ /usr/local/bin/cat_suid_demo
+   24  /usr/local/bin/cat_suid_demo /etc/shadow | head -n 5
+   25  id -u
+   26  id -ru
+   27  cp /usr/bin/cat ~/cat_cap_demo
+   28  chmod 755 ~/cat_cap_demo
+   29  sudo setcap 'cap_dac_read_search=ep' ~/cat_cap_demo
+   30  getcap ~/cat_cap_demo
+   31  ~/cat_cap_demo /etc/shadow | head -n 5
+   32  ls -l ~/cat_cap_demo
+   33  getcap ~/cat_cap_demo
+   34  ~/cat_cap_demo /etc/shadow | head -n 3
+   35  sudo visudo -f /etc/sudoers.d/user1-time
+   36  sudo -k
+   37  sudo -l -U user1
+   38  su - user1
+   39  history > ~/history.out 
